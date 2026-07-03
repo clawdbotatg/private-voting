@@ -1,0 +1,14 @@
+[package]
+name = "e3-user-program"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+fhe = { workspace = true }
+fhe-traits = { workspace = true }
+e3-compute-provider = { git = "https://github.com/gnosisguild/interfold", rev = "d7107db3059d816af6d65f5477fce4cf450c45fc" }
+e3-fhe-params = { git = "https://github.com/gnosisguild/interfold", rev = "d7107db3059d816af6d65f5477fce4cf450c45fc" }
+
+[dev-dependencies]
+rand = { workspace = true }
+anyhow = { workspace = true }

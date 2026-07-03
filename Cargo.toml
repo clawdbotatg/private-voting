@@ -1,0 +1,17 @@
+[workspace]
+resolver = "3"
+members = [
+  "program",
+  ".interfold/support/dev"
+]
+
+[workspace.dependencies]
+e3-user-program = { path = "./program" }
+fhe = { git = "https://github.com/gnosisguild/fhe.rs", tag = "v0.2.2" }
+fhe-traits = { git = "https://github.com/gnosisguild/fhe.rs", tag = "v0.2.2" }
+e3-program-server = { git = "https://github.com/gnosisguild/interfold", rev = "d7107db3059d816af6d65f5477fce4cf450c45fc" }
+e3-bfv-client = { git = "https://github.com/gnosisguild/interfold", rev = "d7107db3059d816af6d65f5477fce4cf450c45fc" }
+e3-fhe-params = { git = "https://github.com/gnosisguild/interfold", rev = "d7107db3059d816af6d65f5477fce4cf450c45fc" }
+e3-compute-provider = { git = "https://github.com/gnosisguild/interfold", rev = "d7107db3059d816af6d65f5477fce4cf450c45fc" }
+rand = "0.9"
+anyhow = "1.0.86"
