@@ -20,6 +20,30 @@ chains:
       fee_token:
         address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
         deploy_block: 7
+  - name: "sepolia"
+    rpc_url: "wss://ethereum-sepolia-rpc.publicnode.com"
+    contracts:
+      e3_program:
+        address: "0x095C187a5bAC36e1857ad2e3c1F5414c3C738511"
+        deploy_block: 11197411
+      interfold:
+        address: "0x64Cd2d88537A18D8E599d786447F9a07Dd9C7f26"
+        deploy_block: 11124539
+      ciphernode_registry:
+        address: "0xDDd7e1eA2AD8195217D9B25B13fac667b6Fc4dD9"
+        deploy_block: 11124526
+      bonding_registry:
+        address: "0x0c25cC9c034611D2F62686e68e61978F21eEc777"
+        deploy_block: 11124527
+      slashing_manager:
+        address: '0x7c0aCC0053370142Da824087640926814502Cf4a'
+        deploy_block: 11124525
+      fee_token:
+        address: "0x08260aE8970E3555E48caA547988bAD397786E6D"
+        deploy_block: 11124519
+      faucet:
+        address: "0x94FCD9b624baAf023c7F48C5E7200eAd85dc87Df"
+        deploy_block: 11124533
 program:
   dev: true
   # risc0:

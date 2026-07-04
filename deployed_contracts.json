@@ -137,5 +137,43 @@
       "address": "0x7bc06c482DEAd17c0e297aFbC32f6e63d3846650",
       "blockNumber": 44
     }
+  },
+  "sepolia": {
+    "PoseidonT3": {
+      "blockNumber": 11124515,
+      "address": "0x3333333C0A88F9BE4fd23ed0536F9B6c427e3B93"
+    },
+    "Interfold": {
+      "blockNumber": 11124539,
+      "address": "0x64Cd2d88537A18D8E599d786447F9a07Dd9C7f26"
+    },
+    "CiphernodeRegistryOwnable": {
+      "blockNumber": 11124526,
+      "address": "0xDDd7e1eA2AD8195217D9B25B13fac667b6Fc4dD9"
+    },
+    "BondingRegistry": {
+      "blockNumber": 11124527,
+      "address": "0x0c25cC9c034611D2F62686e68e61978F21eEc777"
+    },
+    "SlashingManager": {
+      "blockNumber": 11124525,
+      "address": "0x7c0aCC0053370142Da824087640926814502Cf4a"
+    },
+    "MockUSDC": {
+      "blockNumber": 11124519,
+      "address": "0x08260aE8970E3555E48caA547988bAD397786E6D"
+    },
+    "Faucet": {
+      "blockNumber": 11124533,
+      "address": "0x94FCD9b624baAf023c7F48C5E7200eAd85dc87Df"
+    },
+    "ImageID": {
+      "address": "0xFec488bA69DcFe035842A8eDf5dA2332E0d38549",
+      "blockNumber": 11197409
+    },
+    "MyProgram": {
+      "address": "0x095C187a5bAC36e1857ad2e3c1F5414c3C738511",
+      "blockNumber": 11197411
+    }
   }
 }

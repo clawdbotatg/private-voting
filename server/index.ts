@@ -8,7 +8,7 @@ import express, { Request, Response } from 'express'
 import { InterfoldSDK } from '@interfold/sdk'
 import { RegistryEventType, type CommitteePublishedData } from '@interfold/sdk/events'
 import { Log, PublicClient } from 'viem'
-import { hardhat } from 'viem/chains'
+import { hardhat, sepolia } from 'viem/chains'
 import { handleTestInteraction } from './testHandler'
 import { getCheckedEnvVars } from './utils'
 import { callFheRunner } from './runner'
@@ -41,7 +41,7 @@ async function createPrivateSDK() {
       ciphernodeRegistry: CIPHERNODE_REGISTRY_CONTRACT as `0x${string}`,
       feeToken: FEE_TOKEN_CONTRACT as `0x${string}`,
     },
-    chain: hardhat,
+    chain: process.env.CHAIN_ID === '11155111' ? sepolia : hardhat,
     thresholdBfvParamsPresetName: 'INSECURE_THRESHOLD_512',
   })
 
@@ -230,7 +230,11 @@ async function setupEventListeners() {
   // we need to listen to CommitteePublished to know when an E3 is ready
   await sdk.onInterfoldEvent(RegistryEventType.COMMITTEE_PUBLISHED, handleCommitteePublishedEvent)
 
-  await listenToInputPublishedEvents(sdk.getPublicClient(), PROGRAM_ADDRESS as `0x${string}`, 0n)
+  // From-block 0 is fine on a fresh anvil but means scanning from genesis
+  // on a public chain — start just behind the head instead.
+  const headBlock = await sdk.getPublicClient().getBlockNumber()
+  const fromBlock = headBlock > 10n ? headBlock - 10n : 0n
+  await listenToInputPublishedEvents(sdk.getPublicClient(), PROGRAM_ADDRESS as `0x${string}`, fromBlock)
 
   console.log('✅ Event listeners set up successfully')
 }
@@ -272,7 +276,7 @@ async function handleWebhookRequest(req: Request, res: Response) {
         break
       } catch (error) {
         const message = error instanceof Error ? `${error.message} ${String((error as any).cause ?? '')}` : String(error)
-        if (attempt < maxAttempts && message.includes('InputDeadlineNotReached')) {
+        if (attempt < maxAttempts && (message.includes('InputDeadlineNotReached') || message.includes('0xbf1af280'))) {
           console.log(`⏳ Input deadline not reached for E3 ${e3_id} (attempt ${attempt}) — retrying in 5s...`)
           await new Promise((r) => setTimeout(r, 5000))
           continue
