@@ -1,0 +1,7 @@
+[package]
+name = "ballot_validity"
+type = "bin"
+authors = ["slop.computer"]
+
+[dependencies]
+lib = { path = "../../lib" }
