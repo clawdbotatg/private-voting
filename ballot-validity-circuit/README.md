@@ -39,3 +39,19 @@ gen-evm-proof.mjs produces the EVM proof + public_inputs. The 2 public
 inputs are the ciphertext-component commitments; on-chain publishInput
 binds the proof to the submitted ciphertext through them (remaining
 integration).
+
+## Browser proving (proof of concept)
+
+`browser-prove-poc/`: bb.js UltraHonk proving a ballot-validity proof
+in a real (headless) browser. KEY RESULT: works SINGLE-THREADED with
+`Barretenberg.new({ backend: BackendType.Wasm })` and
+`crossOriginIsolated: false` — **no COOP/COEP headers needed**, so it
+won't break slop's cross-origin desktop (avatars, iframes). Measured:
+SRS+api init 11s (one-time, cacheable), proving 5s, 9408-byte EVM proof,
+verifies in-browser. Multi-threaded would be ~1.5s but needs cross-origin
+isolation we don't want.
+
+So the full ballot-validity path is de-risked end to end:
+circuit ✓, on-chain verifier ✓, verifiable-encrypt committee-decryptable ✓,
+browser proving (no headers) ✓. Remaining: bundle into the nextjs voting
+worker + attach proof to vote_cast; on-chain publishInput binding (redeploy).
