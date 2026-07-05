@@ -105,3 +105,41 @@ Privacy is **not** in this list — it is real today.
 nargo `~/.nargo/bin` (1.0.0-beta.16), bb `~/.bb` (3.0.0-nightly.20260102),
 rust via brew rustup (`/opt/homebrew/opt/rustup/bin`) + wasm-pack,
 foundry `~/.foundry/bin`, interfold CLI `~/.local/bin`.
+
+## Client-side voting proofs — status + notes for Auryn / Interfold
+
+**Q (Auryn, 2026-07-05): "You have client-side voting proofs?" → Yes,
+proven end to end; not yet wired into the live vote flow.**
+
+What we built:
+- A single Noir circuit (`ballot-validity-circuit/`, no recursion) that
+  calls Interfold's `user_data_encryption_ct0` + `_ct1` (the Greco
+  encryption relation) in-circuit, plus a one-hot check on `k1` (each
+  coeff in {0, Q_MOD_T_CENTERED}, exactly one nonzero). Built against
+  `configs::default` = `insecure-512` = our exact BFV preset, so the
+  Interfold circuits dropped in unmodified.
+- Witness from `@interfold/wasm bfv_verifiable_encrypt_vector`; proof via
+  noir_js + bb.js UltraHonk. Good one-hot ballot verifies; `[500,0]` /
+  `[2,0]` rejected at witness gen.
+- HonkVerifier codegen'd + **deployed Sepolia
+  `0xEcc4D77e...9336`** — verifies real proofs, reverts on tampering.
+- **Caveat:** proven end-to-end, NOT yet bundled into the live app or
+  checked in `publishInput`. That is the remaining productionization.
+
+Two findings likely useful to the Interfold ecosystem:
+1. **No-COEP single-threaded browser proving.** bb.js proves in a plain
+   browser with `Barretenberg.new({ backend: BackendType.Wasm })` and
+   `crossOriginIsolated: false` — **no COOP/COEP headers**. ~5s/proof,
+   11s one-time SRS. CRISP's web client sets global COEP (breaks
+   cross-origin embedding); this sidesteps it. PoC:
+   `ballot-validity-circuit/browser-prove-poc/`.
+2. **Interfold's Greco circuits are reusable standalone.** We used
+   `user_data_encryption_ct0/ct1` for a custom one-hot ballot without the
+   full CRISP crisp+fold recursive stack — a leaner single-proof path for
+   apps that only need "valid one-hot encryption," no eligibility/mask/
+   ciphertext-addition. Minimal reusable artifact = our
+   `ballot-validity-circuit/`.
+
+If Auryn wants either packaged (a write-up of the no-COEP trick, or a
+clean minimal repo of the one-hot-over-Greco circuit), that's the
+highest-leverage thing to hand back to the ecosystem.
